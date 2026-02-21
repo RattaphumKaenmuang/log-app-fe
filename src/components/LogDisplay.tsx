@@ -30,6 +30,8 @@ function LogDisplay() {
         fetchLogs();
     }, []);
 
+    if (error) return <div>Error: {error}</div>;
+    
     return (
         <div className="flex flex-col items-center justify-center min-w-screen min-h-screen">
             <LogSearchBar></LogSearchBar>
