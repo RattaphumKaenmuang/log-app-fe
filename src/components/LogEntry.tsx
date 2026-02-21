@@ -6,7 +6,7 @@ interface LogEntryProps {
 
 function LogEntry({ log }: LogEntryProps ) {
     return (
-        <tr key={log._id}>
+        <tr key={log._id} className="hover:bg-gray-50 relative after:content-[''] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-px after:bg-gray-200">
             <td className="py-3 px-3">
                 {log.userId.prefix} {log.userId.firstname} {log.userId.lastname}
             </td>

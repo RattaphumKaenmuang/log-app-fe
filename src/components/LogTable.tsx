@@ -86,12 +86,33 @@ const mockLogs: LogData[] = [
     timestamp: "2025-11-20T06:24:45.000Z",
     labnumber: ["L1180973", "L1931529", "L1108114"],
     action: "analyzerRequest"
+  },
+  {
+    _id: "6971a738c5d5e37e272f7b42",
+    userId: {
+      _id: "6971178f323017deaeaaee8f",
+      prefix: "Ms.",
+      firstname: "SARAH",
+      lastname: "JOHNSON"
+    },
+    request: {
+      method: "GET",
+      endpoint: "/api/logs"
+    },
+    response: {
+      statusCode: "200",
+      message: "Logs retrieved successfully",
+      timeMs: 18
+    },
+    timestamp: "2025-12-01T14:35:22.000Z",
+    labnumber: ["L1425670", "L1842091", "L1556234"],
+    action: "logRetrieval"
   }
 ];
 
 function LogTable() {
     return (
-        <div className="max-w-9/10 overflow-x-auto bg-white rounded-[1vw] text-gray-700 shadow-md">
+        <div className="h-[60vh] max-w-[90vw] overflow-x-auto bg-white rounded-[1vw] text-gray-700 shadow-md">
             <table className="min-w-full text-sm">
                 <thead>
                     <tr className="text-left text-gray-700 border-b">
