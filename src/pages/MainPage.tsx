@@ -1,7 +1,9 @@
+import LogDisplay from '../components/LogDisplay'
+
 function MainPage() {
 
     return (
-        <p>...</p>
+        <LogDisplay></LogDisplay>
     )
 }
 
