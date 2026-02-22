@@ -17,11 +17,13 @@ function LogDisplay() {
         const fetchLogs = async () => {
             try {
                 setLoading(true);
-                const response = await api.get<LogData[]>('/log/get-paginated-logs');
+                const params = {
+                    page: page
+                }
+                const response = await api.get<LogData[]>('/log/get-paginated-logs', params);
                 
                 if (response.data) {
                     setLogs(response.data);
-                    setPage(response.pagination?.currentPage ?? 1)
                     setTotalPages(response.pagination?.total ?? 1)
                 } else if (response.error) {
                     setError(response.error.message);
@@ -34,7 +36,7 @@ function LogDisplay() {
         };
 
         fetchLogs();
-    }, []);
+    }, [page]);
 
     if (error) return <div>Error: {error}</div>;
     
