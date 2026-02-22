@@ -15,6 +15,7 @@ interface LogSearchBarProps {
     filters: FiltersType;
     onFiltersChange: (name: keyof FiltersType, value: any) => void;
     onClear: () => void;
+    onSubmit: () => void;
 }
 
 function LogSearchBar({
@@ -22,6 +23,7 @@ function LogSearchBar({
     filters,
     onFiltersChange,
     onClear,
+    onSubmit,
 }: LogSearchBarProps) {
     const userOptions: OptionType[] = [
         { value: '', label: 'แสดงทั้งหมด', isExclusive: true },
@@ -209,6 +211,7 @@ function LogSearchBar({
                 <button className="flex-1 py-2 bg-green-600 text-white rounded-md 
                                    hover:bg-green-700 hover:cursor-pointer transition-colors duration-150 font-semibold"
                     type="button"
+                    onClick={onSubmit}
                 >
                     Submit
                 </button>

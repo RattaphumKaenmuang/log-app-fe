@@ -16,6 +16,7 @@ function LogDisplay() {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [page, setPage] = useState<number>(1);
     const [users, setUsers] = useState<User[]>([]);
+    const [submitCount, setSubmitCount] = useState(0);
 
     const defaultFilters: FiltersType = {
         actions: [] as string[],
@@ -92,7 +93,7 @@ function LogDisplay() {
             }
         };
         fetchLogs();
-    }, [page, filters]);
+    }, [page, filters, submitCount]);
 
     useEffect(() => {
         setPage(1);
@@ -104,6 +105,11 @@ function LogDisplay() {
         setFilters(prev => ({ ...prev, [name]: value }));
     };
 
+    const handleSubmit = () => {
+        setPage(1);
+        setSubmitCount(c => c + 1);
+    };
+
     return (
         <div className="flex flex-col items-center justify-center min-w-screen min-h-screen">
             <LogSearchBar
@@ -111,6 +117,7 @@ function LogDisplay() {
                 filters={filters}
                 onFiltersChange={handleFilterChange}
                 onClear={() => setFilters(defaultFilters)}
+                onSubmit={handleSubmit}
             />
             <LogTable logs={logs} loading={loading} />
             <Pagination page={page} totalPages={totalPages} span={5} onPageChange={setPage} />
