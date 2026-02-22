@@ -16,11 +16,14 @@ type ApiResponse<T> = {
     };
 };
 
+type Primitive = string | number | boolean;
+export type ParamValue = Primitive | Primitive[];
+
 type RequestConfig = {
     method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
     body?: object | FormData;
     headers?: Record<string, string>;
-    params?: Record<string, string | number | boolean>;
+    params?: Record<string, ParamValue>;
 };
 
 export async function baseApiAction<T>(
@@ -32,10 +35,22 @@ export async function baseApiAction<T>(
     try {
         let url = `${BASE_API_URL}${endpoint}`;
         if (params) {
-            const queryString = new URLSearchParams(
-                Object.entries(params).map(([key, value]) => [key, String(value)])
-            ).toString();
-            url += `?${queryString}`;
+            const searchParams = new URLSearchParams();
+
+            Object.entries(params).forEach(([key, value]) => {
+                if (Array.isArray(value)) {
+                    value.forEach(v => {
+                        searchParams.append(key, String(v));
+                    });
+                } else if (value !== undefined && value !== null) {
+                    searchParams.append(key, String(value));
+                }
+            });
+
+            const queryString = searchParams.toString();
+            if (queryString) {
+                url += `?${queryString}`;
+            }
         }
 
         const options: RequestInit = {
@@ -84,7 +99,7 @@ export async function baseApiAction<T>(
 }
 
 export const api = {
-    get: <T>(endpoint: string, params?: Record<string, string | number | boolean>) =>
+    get: <T>(endpoint: string, params?: Record<string, ParamValue>) =>
         baseApiAction<T>(endpoint, { method: "GET", params }),
 
     post: <T>(endpoint: string, body?: object) =>
