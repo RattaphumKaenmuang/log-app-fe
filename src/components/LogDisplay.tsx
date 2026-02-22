@@ -4,15 +4,36 @@ import { api } from '../services/api.service';
 import type { LogData } from "../types/log";
 import { useEffect, useState } from "react";
 import Pagination from "./Pagination";
+import type { User } from "../types/user";
 
 
 function LogDisplay() {
     const [loading, setLoading] = useState(false);
-    const [logs, setLogs] = useState<LogData[]>([]);
     const [error, setError] = useState<string | null>(null);
+
+    const [logs, setLogs] = useState<LogData[]>([]);
     const [totalPages, setTotalPages] = useState<number>(1);
     const [page, setPage] = useState<number>(1);
+    const [users, setUsers] = useState<User[]>([]);
     
+    // Fetch users
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await api.get<User[]>("/user/get-all-existing-users");
+
+                if (response.data) {
+                    setUsers(response.data);
+                }
+            } catch (err) {
+                setError('Failed to fetch logs');
+            }
+        }
+
+        fetchUsers();
+    }, [])
+
+    // Fetch log data
     useEffect(() => {
         const fetchLogs = async () => {
             try {
@@ -42,7 +63,7 @@ function LogDisplay() {
     
     return (
         <div className="flex flex-col items-center justify-center min-w-screen min-h-screen">
-            <LogSearchBar></LogSearchBar>
+            <LogSearchBar users={users}></LogSearchBar>
             <LogTable logs={logs} loading={loading}></LogTable>
             <Pagination page={page} totalPages={totalPages} span={5} onPageChange={setPage}></Pagination>
         </div>

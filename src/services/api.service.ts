@@ -65,8 +65,11 @@ export async function baseApiAction<T>(
             };
         }
 
+        const isArray = Array.isArray(data);
+        const responseData = isArray ? data : data.data;
+
         return {
-            data: data.data,
+            data: responseData,
             pagination: data.pagination
         }
     } catch (error) {

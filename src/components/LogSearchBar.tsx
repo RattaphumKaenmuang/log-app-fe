@@ -2,15 +2,22 @@ import { useState } from 'react';
 import Select, { type MultiValue } from 'react-select';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import type { User } from '../types/user';
 
 interface OptionType {
     value: string;
     label: string;
 }
 
-function LogSearchBar() {
+interface LogSearchBarProps {
+    users: User[];
+}
+
+function LogSearchBar({users = []} : LogSearchBarProps) {
     const [selectedUsers, setSelectedUsers] = useState<MultiValue<OptionType>>([]);
-    const [selectedStatus, setSelectedStatus] = useState<MultiValue<OptionType>>([]);
+    const [selectedAction, setselectedAction] = useState<MultiValue<OptionType>>([
+        { value: '', label: 'แสดงทั้งหมด' }
+    ]);
 
     const getDefaultStartDate = () => {
         const date = new Date();
@@ -24,18 +31,44 @@ function LogSearchBar() {
         return date;
     };
 
+    const handleActionChange = (newValue: MultiValue<OptionType>) => {
+        const showAllOption = actionOptions.find(opt => opt.value === '');
+        const hasShowAll = newValue.some(opt => opt.value === '');
+        const previousHadShowAll = selectedAction.some(opt => opt.value === '');
+
+        if (hasShowAll && !previousHadShowAll) {
+            setselectedAction([showAllOption!]);
+        } else if (hasShowAll && newValue.length > 1) {
+            setselectedAction(newValue.filter(opt => opt.value !== ''));
+        } else {
+            setselectedAction(newValue);
+        }
+    };
+
     const [startDate, setStartDate] = useState<Date | null>(getDefaultStartDate());
     const [endDate, setEndDate] = useState<Date | null>(getDefaultEndDate());
 
-    const userOptions: OptionType[] = [
-        { value: 'john', label: 'John Firmer' },
-        { value: 'jane', label: 'Jane Firmer' }
-    ];
+    const userOptions: OptionType[] = users.map(user => ({
+        value: user._id,
+        label: `${user.prefix} ${user.firstname} ${user.lastname}`
+    }));
 
-    const statusOptions: OptionType[] = [
-        { value: '200', label: '200 - Success' },
-        { value: '500', label: '500 - Server Error' },
-        { value: '503', label: '503 - Service Unavailable' }
+    const actionOptions: OptionType[] = [
+        { value: 'labOrder', label: 'labOrder' },
+        { value: 'labResult', label: 'labResult' },
+        { value: 'receive', label: 'receive' },
+        { value: 'accept', label: 'accept' },
+        { value: 'approve', label: 'approve' },
+        { value: 'reapprove', label: 'reapprove' },
+        { value: 'unapprove', label: 'unapprove' },
+        { value: 'unreceive', label: 'unreceive' },
+        { value: 'rerun', label: 'rerun' },
+        { value: 'save', label: 'save' },
+        { value: 'listTransactions', label: 'listTransactions' },
+        { value: 'getTransaction', label: 'getTransaction' },
+        { value: 'analyzerResult', label: 'analyzerResult' },
+        { value: 'analyzerRequest', label: 'analyzerRequest' },
+        { value: '', label: 'แสดงทั้งหมด' }
     ];
 
     return (
@@ -64,10 +97,11 @@ function LogSearchBar() {
                     <legend className="text-sm font-medium px-1">Action</legend>
                     <Select<OptionType, true>
                         isMulti
-                        options={statusOptions}
-                        value={selectedStatus}
-                        onChange={(newValue) => setSelectedStatus(newValue)}
+                        options={actionOptions}
+                        value={selectedAction}
+                        onChange={(newValue) => handleActionChange(newValue)}
                         placeholder="Select status..."
+                        
                         classNamePrefix="react-select"
                         styles={{
                             control: (base) => ({
