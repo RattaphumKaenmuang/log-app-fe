@@ -65,7 +65,7 @@ function LogDisplay() {
                 
                 if (response.data) {
                     setLogs(response.data);
-                    setTotalPages(response.pagination?.total ?? 1)
+                    setTotalPages(response.pagination?.totalPages ?? 1)
                 } else if (response.error) {
                     setError(response.error.message);
                 }

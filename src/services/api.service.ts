@@ -9,11 +9,10 @@ type ApiResponse<T> = {
         timestamp: string;
     };
     pagination?: {
+        page: number;
+        limit: number;
         total: number;
-        pageSize: number;
-        currentPage: number;
-        lastPage: number;
-        nextPage: number | null;
+        totalPages: number;
     };
 };
 

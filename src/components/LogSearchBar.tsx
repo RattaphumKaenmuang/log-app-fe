@@ -111,6 +111,29 @@ function LogSearchBar({
         { value: '', label: 'แสดงทั้งหมด' }
     ];
 
+    // Clear handler
+    const handleClear = () => {
+        const defaultUser = [{ value: '', label: 'แสดงทั้งหมด' }];
+        const defaultAction = [{ value: '', label: 'แสดงทั้งหมด' }];
+        setSelectedUsers(defaultUser);
+        setSelectedAction(defaultAction);
+        setStartDate(getDefaultStartDate());
+        setEndDate(getDefaultEndDate());
+        setStatusCode('');
+        setLabNumber('');
+        setLowerResTime(0);
+        setUpperResTime(999999);
+
+        onUsersChange([]);
+        onActionsChange([]);
+        onStartDateChange(getDefaultStartDate());
+        onEndDateChange(getDefaultEndDate());
+        onStatusCodeChange('');
+        onLabnumberChange('');
+        onLowerResTimeChange(0);
+        onUpperResTimeChange(999999);
+    };
+
     return (
         <div className="w-[88vw] mb-3 bg-white text-gray-700 rounded-xl p-4 mt-2 relative z-30">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
@@ -189,7 +212,8 @@ function LogSearchBar({
                             setStartDate(date);
                             if (date) onStartDateChange(date);
                         }}
-                        showTimeSelect
+                        // showTimeSelect
+                        showTimeInput
                         timeFormat="HH:mm"
                         timeIntervals={1}
                         dateFormat="MMMM d, yyyy HH:mm"
@@ -197,6 +221,9 @@ function LogSearchBar({
                         className="outline-none w-full"
                         maxDate={endDate || undefined}
                         withPortal
+                        showYearDropdown
+                        showMonthDropdown
+                        dropdownMode="select"
                     />
                 </fieldset>
 
@@ -208,7 +235,8 @@ function LogSearchBar({
                             setEndDate(date);
                             if (date) onEndDateChange(date);
                         }}
-                        showTimeSelect
+                        // showTimeSelect
+                        showTimeInput
                         timeFormat="HH:mm"
                         timeIntervals={1}
                         dateFormat="MMMM d, yyyy HH:mm"
@@ -216,6 +244,9 @@ function LogSearchBar({
                         className="outline-none w-full"
                         minDate={startDate || undefined}
                         withPortal
+                        showYearDropdown
+                        showMonthDropdown
+                        dropdownMode="select"
                     />
                 </fieldset>
 
@@ -253,12 +284,18 @@ function LogSearchBar({
             </div>
 
             <div className="flex gap-2">    
-                <button className="flex-1 py-2 bg-gray-200 text-gray-700 border border-gray-300 rounded-md 
-                                   hover:bg-gray-300 hover:cursor-pointer transition-colors duration-150 font-semibold">
+                <button
+                    type="button"
+                    className="flex-1 py-2 bg-gray-200 text-gray-700 border border-gray-300 rounded-md 
+                                   hover:bg-gray-300 hover:cursor-pointer transition-colors duration-150 font-semibold"
+                    onClick={handleClear}
+                >
                     Clear
                 </button>
                 <button className="flex-1 py-2 bg-green-600 text-white rounded-md 
-                                   hover:bg-green-700 hover:cursor-pointer transition-colors duration-150 font-semibold">
+                                   hover:bg-green-700 hover:cursor-pointer transition-colors duration-150 font-semibold"
+                    type="button"
+                >
                     Submit
                 </button>
             </div>
