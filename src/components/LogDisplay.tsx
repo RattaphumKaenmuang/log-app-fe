@@ -16,7 +16,7 @@ function LogDisplay() {
     const [totalPages, setTotalPages] = useState<number>(1);
     const [page, setPage] = useState<number>(1);
     const [users, setUsers] = useState<User[]>([]);
-    const [submitCount, setSubmitCount] = useState(0);
+    const [submitCount, setSubmitCount] = useState(0); // Dummy useState for submit button
 
     const defaultFilters: FiltersType = {
         actions: [] as string[],
@@ -29,7 +29,25 @@ function LogDisplay() {
         upperResTime: 999999,
     }
 
-    const [filters, setFilters] = useState<FiltersType>(defaultFilters);
+    const FILTERS_KEY = "logAppFilters";
+    const getInitialFilters = (): FiltersType => {
+        const stored = localStorage.getItem(FILTERS_KEY);
+        if (stored) {
+            try {
+                const parsed = JSON.parse(stored);
+                return {
+                    ...parsed,
+                    startDate: new Date(parsed.startDate),
+                    endDate: new Date(parsed.endDate),
+                };
+            } catch {
+                return defaultFilters;
+            }
+        }
+        return defaultFilters;
+    };
+
+    const [filters, setFilters] = useState<FiltersType>(getInitialFilters);
 
     // Fetch users
     useEffect(() => {
@@ -97,6 +115,7 @@ function LogDisplay() {
 
     useEffect(() => {
         setPage(1);
+        localStorage.setItem(FILTERS_KEY, JSON.stringify(filters));
     }, [filters]);
 
     if (error) return <div>Error: {error}</div>;
