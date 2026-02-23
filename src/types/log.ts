@@ -15,7 +15,7 @@ export interface LogData {
     message: string;
     timeMs: number;
   };
-  timestamp: string;
+  timestamp: Date;
   labnumber: string[];
   action: string;
 }

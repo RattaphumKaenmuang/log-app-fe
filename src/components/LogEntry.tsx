@@ -5,6 +5,16 @@ interface LogEntryProps {
 }
 
 function LogEntry({ log }: LogEntryProps ) {
+    const formattedDate = new Date(log.timestamp).toLocaleString(undefined, {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hour12: false
+    });
+    
     return (
         <tr key={log._id} className="hover:bg-gray-50 relative after:content-[''] after:absolute after:bottom-0 after:left-4 after:right-4 after:h-px after:bg-gray-200">
             <td className="py-3 px-3">
@@ -12,7 +22,7 @@ function LogEntry({ log }: LogEntryProps ) {
             </td>
             <td className="py-3 px-3">{log.request.endpoint}</td>
             <td className="py-3 px-3">{log.request.method}</td>
-            <td className="py-3 px-3">{new Date(log.timestamp).toLocaleString()}</td>
+            <td className="py-3 px-3">{formattedDate}</td>
             <td className="py-3 px-3">{log.labnumber.join(", ")}</td>
             <td className="py-3 px-3">{log.action}</td>
             <td className="py-3 px-3">
